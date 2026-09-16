@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>课间 · 课程表查询</title>
+  <meta name="description" content="按星期、课程或教师查询课表，添加课程并检查时间冲突。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2394070a'/%3E%3Cpath d='M8 9h16v16H8zM8 14h16M13 7v5M19 7v5' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="model.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./"><span class="brand-mark">课</span>课间<span class="brand-sub">课程表查询</span></a><span class="local-badge">本机课表</span></header>
+  <main>
+    <section class="heading"><div><p class="eyebrow">MY WEEKLY SCHEDULE</p><h1>这一周，有条不紊。</h1><p class="intro">查课程，找教室，安排好每一天。</p></div><button class="primary" id="add-course">＋ 添加课程</button></section>
+    <section class="workspace" aria-label="课表查询">
+      <div class="toolbar"><div class="week-title"><h2>每周课表</h2><span id="count"></span></div><div class="filters"><label class="search"><span>搜索</span><input id="query" type="search" placeholder="课程名称 / 教师 / 教室" autocomplete="off"></label><label class="teacher-label"><span class="sr-only">按教师筛选</span><select id="teacher"><option value="">全部教师</option></select></label><button class="text-button" id="clear">清除筛选</button></div></div>
+      <div class="days" role="group" aria-label="按星期筛选"></div>
+      <div id="schedule"></div>
+      <div id="empty" class="empty" hidden><span class="empty-icon">—</span><h3>这里暂时没有课程</h3><p>试试其他星期或关键词，也可以添加一门新课程。</p></div>
+      <footer class="workspace-footer"><span>时间以课程节次为准</span><span>点击课程查看详情</span></footer>
+    </section>
+    <div class="note"><span>示例起步，自由调整</span><p>初始课程均为演示数据，不代表真实课表。修改仅保存在当前浏览器，请勿录入敏感信息。</p></div>
+    <p id="storage-warning" class="warning" role="alert" hidden>浏览器存储不可用，当前修改只能保留到页面关闭。</p>
+  </main>
+  <dialog id="editor" aria-labelledby="editor-title"><form id="course-form"><div class="dialog-top"><div><p class="eyebrow">NEW COURSE</p><h2 id="editor-title">添加一门课程</h2></div><button type="button" class="icon-button" data-close aria-label="关闭">×</button></div><label>课程名称<input name="name" required maxlength="40" placeholder="例如：互联网软件开发"></label><div class="form-row"><label>教师<input name="teacher" required maxlength="20" placeholder="例如：张老师"></label><label>教室<input name="room" required maxlength="30" placeholder="例如：教学楼 3202"></label></div><label>星期<select name="day" id="form-day"></select></label><div class="form-row"><label>开始节次<select name="start" id="form-start"></select></label><label>结束节次<select name="end" id="form-end"></select></label></div><p class="form-hint">同一天的课程节次不能重叠。</p><p id="form-error" role="alert"></p><div class="dialog-actions"><button type="button" class="secondary" data-close>取消</button><button class="primary" type="submit">保存课程</button></div></form></dialog>
+  <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><p class="eyebrow">COURSE DETAILS</p><button class="icon-button" data-close aria-label="关闭">×</button></div><h2 id="detail-title"></h2><dl id="detail-fields"></dl><div id="delete-confirm" hidden><p>确定删除这门课程吗？</p><button class="secondary" id="cancel-delete">保留课程</button><button class="danger" id="confirm-delete">确认删除</button></div><div class="dialog-actions" id="detail-actions"><button class="danger-ghost" id="delete-course">删除课程</button><button class="primary" data-close>完成</button></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

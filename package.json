@@ -1,0 +1,7 @@
+{
+  "name": "course-schedule-query",
+  "version": "1.0.0",
+  "private": true,
+  "description": "课程表查询课堂小项目",
+  "scripts": {"start": "node server.cjs", "test": "node test.cjs"}
+}
